@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".signUpCustomer">
+    <EditText
+        android:id="@+id/customerSignUpUsernameETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"/>
+    <EditText
+        android:id="@+id/customerSignUpPassETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"/>
+       <EditText
+           android:id="@+id/customerSignUpFNameETxt"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="First Name"/>
+    <EditText
+        android:id="@+id/customerSignUpLNameETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last Name"/>
+    <EditText
+        android:id="@+id/customerSignUpEmailETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"/>
+    <EditText
+        android:id="@+id/customerSignUpAddressETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"/>
+    <Button
+        android:id="@+id/customerSignUpApplyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply"/>
+    <Button
+        android:id="@+id/customerSignUpBackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back"/>
+
+
+</LinearLayout>

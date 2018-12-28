@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CreateShoppingListActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What you need?"/>
+        <EditText
+            android:id="@+id/createShoppingListHowManyETxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="How many?"/>
+        <ListView
+            android:id="@+id/createShoppingListProductListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
+    </LinearLayout>
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="---------------------------"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/createShoppingListTotallyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Totally: "/>
+        <ListView
+            android:id="@+id/createShoppingListChoosenListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/createShoppingListBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Back"/>
+        <Button
+            android:id="@+id/createShoppingListApplyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Apply"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

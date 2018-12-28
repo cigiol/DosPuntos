@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PointsToFriendActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please enter your friend datas."/>
+        <EditText
+            android:id="@+id/pointsToFriendCardNumberETxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Number of card"/>
+        <EditText
+            android:id="@+id/pointsToFriendEmailETxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"/>
+        <EditText
+            android:id="@+id/pointsToFriendHowManyETxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="How many points?"/>
+        <Button
+            android:id="@+id/pointsToFriendApplyEBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apply"/>
+        <Button
+            android:id="@+id/pointsToFriendBackEBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

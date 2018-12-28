@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NewClientActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="190dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What you need?"/>
+        <EditText
+            android:id="@+id/newClientHowManyETxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="How many?"/>
+        <ListView
+            android:id="@+id/newClientProductListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="---------------------------"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="143dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/newClientTotallyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Totally: " />
+
+        <ListView
+            android:id="@+id/newClientChoosenListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/newClientEmailETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"/>
+    <EditText
+        android:id="@+id/newClientCardNumberETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of Card"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/newClientBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Back"/>
+        <Button
+            android:id="@+id/newClientApplyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Apply"/>
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

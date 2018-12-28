@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.yavuz.dospuntos">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".signUpCustomer" />
+        <activity android:name=".EmployeeActivity" />
+        <activity android:name=".SignUpEmployeeActivity" />
+        <activity android:name=".CustomerActivity" />
+        <activity android:name=".CustomerSettingsActivity" />
+        <activity android:name=".ProductPriceActivity" />
+        <activity android:name=".PointsToFriendActivity" />
+        <activity android:name=".CreateShoppingListActivity" />
+        <activity android:name=".EmployeeSettingsActivity" />
+        <activity android:name=".AddNewProductActivity" />
+        <activity android:name=".NewClientActivity"></activity>
+    </application>
+
+</manifest>

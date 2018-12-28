@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CustomerActivity">
+
+    <RelativeLayout
+        android:id="@+id/customerSettingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/customerSettingsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/cardsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignBottom="@+id/customerSettingLayout">
+
+        <ListView
+            android:id="@+id/customerCardsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignBottom="@+id/cardsLayout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/customerShowListBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show List"/>
+            <Button
+                android:id="@+id/customerCreateListBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create List"/>
+            <Button
+                android:id="@+id/customerAddCardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Card"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/customerPointsToCashBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points to Cash"/>
+            <Button
+                android:id="@+id/customerPointsToFriendBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points to Friend"/>
+            <Button
+                android:id="@+id/customerLogoutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

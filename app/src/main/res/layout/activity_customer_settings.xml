@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CustomerSettingsActivity">
+
+    <EditText
+        android:id="@+id/customerSettingsNameETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"/>
+    <EditText
+        android:id="@+id/customerSettingsSurnameETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surname"/>
+    <EditText
+        android:id="@+id/customerSettingsAddressETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"/>
+    <EditText
+        android:id="@+id/customerSettingsEmailETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"/>
+    <EditText
+        android:id="@+id/customerSettingsPasswordETxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="127dp"
+        android:orientation="horizontal">
+
+        <ExpandableListView
+            android:id="@+id/customerSettingsCardsListView"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"></ExpandableListView>
+
+        <Button
+            android:id="@+id/customerSettingsCardDeleteBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/customerSettingsApplyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply"/>
+    <Button
+        android:id="@+id/customerSettingsBackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back"/>
+
+
+</LinearLayout>
