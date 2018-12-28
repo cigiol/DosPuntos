@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "153901603476",
+    "firebase_url": "https://dospuntos-a9629.firebaseio.com",
+    "project_id": "dospuntos-a9629",
+    "storage_bucket": "dospuntos-a9629.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153901603476:android:4d66bed0c47c22e2",
+        "android_client_info": {
+          "package_name": "com.example.yavuz.dospuntos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153901603476-ordcdi8r60ip3jea5c779aub7loh9q49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHAC7g4-I6lFYTgFAQI7GMTzOM51qGGsc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
