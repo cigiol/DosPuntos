@@ -42,6 +42,7 @@ public class ProductPriceActivity extends Activity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                //asdfghjkl
                 //DataSnapshot productsSnap = dataSnapshot.child("products");
                 //Iterable<DataSnapshot> proPrice = customerSnap.getChildren();
                 String values;
