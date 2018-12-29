@@ -18,12 +18,12 @@
         android:layout_height="wrap_content"
         android:hint="Password"/>
     <Button
-        android:id="@+id/loginLoginBtnETxt"
+        android:id="@+id/loginLoginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"/>
     <Button
-        android:id="@+id/loginBackETxt"
+        android:id="@+id/loginBackBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back"/>
