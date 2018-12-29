@@ -42,31 +42,6 @@ public class SignUpEmployeeActivity extends Activity {
 
     }
 
-   /* @IgnoreExtraProperties
-    public class Employee {
-
-        public String username;
-        public String pw;
-        public String fn;
-        public String ln;
-
-        public Employee() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
-        }
-
-        public Employee(String username,String pw,String fn,String ln) {
-            this.username = username;
-            this.pw = pw;
-            this.fn = fn;
-            this.ln = ln;
-        }
-
-    }
-
-*/
-
-
-
     public void applyClick(View view){
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -77,7 +52,6 @@ public class SignUpEmployeeActivity extends Activity {
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.child("employee").child(un.getText().toString()).exists() || snapshot.child("customers").child(un.getText().toString()).exists() ) {
                     Toast.makeText(getApplicationContext(),"USERNAME EXIST",Toast.LENGTH_SHORT).show();
-
 
                 }
                 else {
@@ -97,10 +71,6 @@ public class SignUpEmployeeActivity extends Activity {
 
             }
         });
-
-
-
-
     }
 
     public void backClick(View view){

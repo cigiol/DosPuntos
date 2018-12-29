@@ -32,11 +32,13 @@
         android:id="@+id/employeeSignUpApplyBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Apply"/>
+        android:text="Apply"
+        android:onClick="applyClick"/>
     <Button
         android:id="@+id/employeeSignUpBackBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"/>
+        android:text="Back"
+        android:onClick="backClick"/>
 
 </LinearLayout>
