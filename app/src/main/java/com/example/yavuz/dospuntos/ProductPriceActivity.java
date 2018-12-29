@@ -45,7 +45,7 @@ public class ProductPriceActivity extends Activity {
                 //DataSnapshot productsSnap = dataSnapshot.child("products");
                 //Iterable<DataSnapshot> proPrice = customerSnap.getChildren();
                 String values;
-
+                //sasasasasasasas
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     HashMap<String,String> hashMap = (HashMap<String,String>) ds.getValue();
                     values = hashMap.get("name")+"-"+hashMap.get("price")+"-"+hashMap.get("quantity");
