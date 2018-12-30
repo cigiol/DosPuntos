@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,12 +20,29 @@ import java.util.Random;
 
 public class CustomerActivity extends Activity {
 
-    Button addCard,pointToCash,pointToFriend;
+    Button addCard,pointToCash,pointToFriend,showList,createList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
+
+        showList = findViewById(R.id.customerShowListBtn);
+        createList = findViewById(R.id.customerCreateListBtn);
+        showList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestIntent = new Intent(CustomerActivity.this,ProductPriceActivity.class);
+                startActivity(guestIntent);
+            }
+        });
+        createList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestIntent = new Intent(CustomerActivity.this,CreateShoppingListActivity.class);
+                startActivity(guestIntent);
+            }
+        });
 
         addCard = findViewById(R.id.customerAddCardBtn);
         pointToCash = findViewById(R.id.customerPointsToCashBtn);
