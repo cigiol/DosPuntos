@@ -3,6 +3,7 @@ package com.example.yavuz.dospuntos;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,8 +16,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CreateShoppingListActivity extends Activity {
 
@@ -32,11 +38,14 @@ public class CreateShoppingListActivity extends Activity {
     ArrayList<String> cProductFromFB;
     ArrayList<String> cPriceFromFB;
     ArrayList<String> cQuantityFromFB;
+    String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_shopping_list);
-
+        Bundle extras = getIntent().getExtras();
+        userName = extras.getString("username");
         howMany = (TextView) findViewById(R.id.createShoppingListHowManyETxt);
         listView = findViewById(R.id.createShoppingListProductListView);
         cListView = findViewById(R.id.createShoppingListChoosenListView);
@@ -63,6 +72,19 @@ public class CreateShoppingListActivity extends Activity {
                     cPriceFromFB.add(String.valueOf(calculate));
                     cQuantityFromFB.add(howMany.getText().toString());
                     adapter2.notifyDataSetChanged();
+                    Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
+                    JSONObject jo=new JSONObject();
+                    try {
+
+                        String time=DateFormat.getDateTimeInstance().format(new Date());
+                        Invoice inv=new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
+                        myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
+                        System.out.println(inv);//TODO toplam ekle
+                    }
+                    catch (Exception e){
+
+                    }
+
                 }
                 else{
                     howMany.setError("FILL IT UP");

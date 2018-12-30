@@ -36,13 +36,7 @@ public class CustomerActivity extends Activity {
                 startActivity(guestIntent);
             }
         });
-        createList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent guestIntent = new Intent(CustomerActivity.this,CreateShoppingListActivity.class);
-                startActivity(guestIntent);
-            }
-        });
+
 
         addCard = findViewById(R.id.customerAddCardBtn);
         pointToCash = findViewById(R.id.customerPointsToCashBtn);
@@ -61,6 +55,15 @@ public class CustomerActivity extends Activity {
         //Database init
         final DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference("customers");
+
+        createList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestIntent = new Intent(CustomerActivity.this,CreateShoppingListActivity.class);
+                guestIntent.putExtra("username",userName);
+                startActivity(guestIntent);
+            }
+        });
 
         //Points To Friend
         pointToFriend.setOnClickListener(new View.OnClickListener() {
