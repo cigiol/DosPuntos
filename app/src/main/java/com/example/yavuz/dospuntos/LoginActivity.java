@@ -60,6 +60,7 @@ public class LoginActivity extends Activity {
                             else{
                                 //To customerMainMenu
                                 Intent customerMainIntent = new Intent(LoginActivity.this,CustomerActivity.class);
+                                customerMainIntent.putExtra("username",uName);
                                 startActivity(customerMainIntent);
                             }
                         }

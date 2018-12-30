@@ -13,12 +13,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please enter your friend datas."/>
+            android:text="Please select your card."/>
+        <Spinner
+            android:id="@+id/pointsToFriendCardsSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Spinner>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="
+Please enter your friend datas."/>
         <EditText
             android:id="@+id/pointsToFriendCardNumberETxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Number of card"/>
+            android:hint="Number of card"
+            android:inputType="number"/>
         <EditText
             android:id="@+id/pointsToFriendEmailETxt"
             android:layout_width="match_parent"
@@ -28,7 +40,9 @@
             android:id="@+id/pointsToFriendHowManyETxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="How many points?"/>
+            android:hint="How many points?"
+            android:inputType="number"/>
+
         <Button
             android:id="@+id/pointsToFriendApplyEBtn"
             android:layout_width="match_parent"
