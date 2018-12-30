@@ -71,8 +71,9 @@ public class LoginActivity extends Activity {
                                 Toast.makeText(getApplicationContext(), "Password is wrong.", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                //To customerMainMenu
+                                //To EmployeeMainMenu
                                 Intent employeeMainIntent = new Intent(LoginActivity.this,EmployeeActivity.class);
+                                employeeMainIntent.putExtra("username",uName);
                                 startActivity(employeeMainIntent);
                             }
                         }

@@ -11,22 +11,32 @@
         android:id="@+id/addNewProductNameETxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Product Name"/>
+        android:hint="Enter Product Name" />
 
     <EditText
         android:id="@+id/addNewProductPriceETxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Product Price"/>
+
+    <EditText
+        android:id="@+id/addNewQuanlityNameETxt2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Product Quantity" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/addNewProductApplyBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Apply"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="0dp"
+            android:text="Apply" />
         <Button
             android:id="@+id/addNewProductBackBtn"
             android:layout_width="wrap_content"
