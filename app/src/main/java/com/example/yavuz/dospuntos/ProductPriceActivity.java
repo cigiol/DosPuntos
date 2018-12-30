@@ -22,38 +22,43 @@ import java.util.List;
 
 public class ProductPriceActivity extends Activity {
 
-    ListView productsLV;
-    Button back;
+    ListView listView;
+    AllPostClass adapter;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference myRef;
+    ArrayList<String> productFromFB;
+    ArrayList<String> priceFromFB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_price);
 
-        back = findViewById(R.id.productPriceBackBtn);
-        productsLV = findViewById(R.id.productPriceListView);
+        listView = findViewById(R.id.listView);
+        productFromFB = new ArrayList<String>();
+        priceFromFB = new ArrayList<String>();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = firebaseDatabase.getReference();
 
-        final List<String> products = new ArrayList<String>();
-        final List<String> prices = new ArrayList<String>();
-        final List<String> quantities = new ArrayList<String>();
+        adapter = new AllPostClass(productFromFB,priceFromFB,this);
 
-        DatabaseReference mDatabase;
-        mDatabase = FirebaseDatabase.getInstance().getReference("products");
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        listView.setAdapter(adapter);
+        getDataFromFB();
+    }
+    public void getDataFromFB(){
+        DatabaseReference newRef= firebaseDatabase.getReference("products");
+        newRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //DataSnapshot productsSnap = dataSnapshot.child("products");
-                //Iterable<DataSnapshot> proPrice = customerSnap.getChildren();
-                String values;
-                //sasasasasasasas
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                //System.out.println("dataFB"+dataSnapshot.getChildren());
+                //System.out.println("dataFB"+dataSnapshot.getKey());
+                //System.out.println("dataFB"+dataSnapshot.getValue());
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
                     HashMap<String,String> hashMap = (HashMap<String,String>) ds.getValue();
-                    values = hashMap.get("name")+"-"+hashMap.get("price")+"-"+hashMap.get("quantity");
-                    products.add(values);
+                    productFromFB.add(hashMap.get("name"));
+                    priceFromFB.add(hashMap.get("price"));
+                    adapter.notifyDataSetChanged();
                 }
-                ArrayAdapter<String> adapterIn = new ArrayAdapter<String>(ProductPriceActivity.this, android.R.layout.simple_list_item_1,products);
-
-                productsLV.setAdapter(adapterIn);
             }
 
             @Override
@@ -61,17 +66,5 @@ public class ProductPriceActivity extends Activity {
 
             }
         });
-
-
-
-        //Back
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
     }
 }

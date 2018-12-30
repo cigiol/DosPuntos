@@ -6,25 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ProductPriceActivity">
 
-    <LinearLayout
-        android:id="@+id/productsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="380dp"
-        android:orientation="vertical"
-        android:layout_alignParentLeft="true">
 
-        <ListView
-            android:id="@+id/productPriceListView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ListView>
-    </LinearLayout>
-    <Button
-        android:id="@+id/productPriceBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Back"/>
-
-
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp" />
 </RelativeLayout>
