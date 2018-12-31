@@ -28,14 +28,16 @@ import java.util.Random;
 
 public class CustomerActivity extends Activity {
 
-    Button addCard,pointToFriend,showList,createList;
+    Button addCard,pointToFriend,showList,createList,setting;
+
     Spinner cardSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
-
+        setting=findViewById(R.id.customerSettingsBtn);
         showList = findViewById(R.id.customerShowListBtn);
         createList = findViewById(R.id.customerCreateListBtn);
         cardSpinner = findViewById(R.id.customerCardSpinner);
@@ -61,10 +63,20 @@ public class CustomerActivity extends Activity {
         }
         final String userName = uName;
 
+        //Go To Setting
+
         //Database init
         final DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference("customers");
 
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent setIntent = new Intent(CustomerActivity.this,CustomerSettingsActivity.class);
+                setIntent.putExtra("username",userName);
+                startActivity(setIntent);
+            }
+        });
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
