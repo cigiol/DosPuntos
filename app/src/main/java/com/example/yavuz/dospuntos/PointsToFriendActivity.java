@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,8 @@ public class PointsToFriendActivity extends Activity {
                         Iterable<DataSnapshot> cardValue = customers.child("cards").getChildren();
 
                         for (DataSnapshot card : cardValue){
-                            cards.add("Number:"+card.getKey()+"::Points:"+card.getValue());
+                            float po = Float.parseFloat(card.getValue().toString());
+                            cards.add("Number:"+card.getKey()+"::Points:"+new DecimalFormat("##.##").format(po));
                         }
                         break;
                     }
@@ -103,7 +105,7 @@ public class PointsToFriendActivity extends Activity {
 
                 final String mail = email.getText().toString();
                 final int number = Integer.parseInt(cardNumber.getText().toString());
-                final int point = Integer.parseInt(pointCount.getText().toString());
+                final float point = Float.parseFloat(pointCount.getText().toString());
 
 
                 ValueEventListener dbListener = new ValueEventListener() {
@@ -137,8 +139,8 @@ public class PointsToFriendActivity extends Activity {
                                 //For user
                                 if(customers.getKey().equals(userName) && !everythingIsDone[2]){
                                     String [] cardsValues = cardsSpin.getSelectedItem().toString().split(":");
-                                    int oldPoint = Integer.parseInt(cardsValues[4]);
-                                    int newPoint = oldPoint - point;
+                                    float oldPoint = Float.parseFloat(cardsValues[4]);
+                                    float newPoint = oldPoint - point;
                                     if(newPoint<0){
                                         Toast.makeText(getApplicationContext(),"You don't have enough points. Please enter less points.",Toast.LENGTH_SHORT).show();
                                         break;
@@ -156,8 +158,8 @@ public class PointsToFriendActivity extends Activity {
                             for (DataSnapshot customers : dataSnapshot.getChildren()) {
                                 //For user's friend
                                 if(customers.child("email").getValue().toString().equals(mail) && everythingIsDone[2]){
-                                    int oldPoint = Integer.parseInt(customers.child("cards").child(String.valueOf(number)).getValue().toString());
-                                    int newPoint = oldPoint + point;
+                                    float oldPoint = Float.parseFloat(customers.child("cards").child(String.valueOf(number)).getValue().toString());
+                                    float newPoint = oldPoint + (point*4/5);
                                     String friend = customers.getKey();
                                     mDatabase.child(friend).child("cards").child(String.valueOf(number)).setValue(newPoint);
                                     everythingIsDone[0] = true;
@@ -171,7 +173,7 @@ public class PointsToFriendActivity extends Activity {
                         if (everythingIsDone[0]==true && everythingIsDone[1]==true){
                             //TODO Successfailed i degismeyi unutma
                             //TODO Ekstra olarak apply yaparken sorabilir emin misin falan diye
-                            //TODO Para gonderim kisminda kesinti yapacaksin
+
                             Toast.makeText(getApplicationContext(),"Successfailed.",Toast.LENGTH_SHORT).show();
                             finish();
                         }

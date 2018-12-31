@@ -2,12 +2,17 @@ package com.example.yavuz.dospuntos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,11 +21,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CustomerActivity extends Activity {
 
-    Button addCard,pointToCash,pointToFriend,showList,createList;
+    Button addCard,pointToFriend,showList,createList;
+    Spinner cardSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +38,7 @@ public class CustomerActivity extends Activity {
 
         showList = findViewById(R.id.customerShowListBtn);
         createList = findViewById(R.id.customerCreateListBtn);
+        cardSpinner = findViewById(R.id.customerCardSpinner);
         showList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,7 +49,6 @@ public class CustomerActivity extends Activity {
 
 
         addCard = findViewById(R.id.customerAddCardBtn);
-        pointToCash = findViewById(R.id.customerPointsToCashBtn);
         pointToFriend = findViewById(R.id.customerPointsToFriendBtn);
 
         String uName = null;
@@ -55,6 +64,45 @@ public class CustomerActivity extends Activity {
         //Database init
         final DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference("customers");
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                //Array for cards info
+                List<String> cards = new ArrayList<String>();
+
+                for (DataSnapshot customers : dataSnapshot.getChildren()) {
+
+                    if(customers.getKey().equals(userName)){
+                        Iterable<DataSnapshot> cardValue = customers.child("cards").getChildren();
+
+                        for (DataSnapshot card : cardValue){
+                            float po = Float.parseFloat(card.getValue().toString());
+                            cards.add("Number:"+card.getKey()+"::Points:"+new DecimalFormat("##.##").format(po));
+                        }
+                        break;
+                    }
+                }
+
+                ArrayAdapter<String> adapterIn = new ArrayAdapter<String>(CustomerActivity.this, android.R.layout.simple_list_item_1,cards);
+                cardSpinner.setAdapter(adapterIn);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        createList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guestIntent = new Intent(CustomerActivity.this,CreateShoppingListActivity.class);
+                guestIntent.putExtra("username",userName);
+                startActivity(guestIntent);
+            }
+        });
 
         createList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,14 +120,6 @@ public class CustomerActivity extends Activity {
                 Intent toFriendIntent = new Intent(CustomerActivity.this,PointsToFriendActivity.class);
                 toFriendIntent.putExtra("username",userName);
                 startActivity(toFriendIntent);
-            }
-        });
-
-        //Points To Cash
-        pointToCash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 
