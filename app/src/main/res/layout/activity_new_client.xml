@@ -15,11 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="What you need?"/>
+
         <EditText
             android:id="@+id/newClientHowManyETxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="How many?"/>
+            android:hint="How many?"
+            android:inputType="number" />
         <ListView
             android:id="@+id/newClientProductListView"
             android:layout_width="wrap_content"
