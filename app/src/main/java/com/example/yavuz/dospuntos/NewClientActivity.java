@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -30,7 +33,7 @@ import java.util.Map;
 
 public class NewClientActivity extends Activity {
 
-    TextView howMany,totalETxt;
+    TextView howMany,totalETxt,mailETxt,cardETxt;
     ListView listView;
     ListView cListView;
     AllPostClass adapter;
@@ -43,6 +46,8 @@ public class NewClientActivity extends Activity {
     ArrayList<String> cPriceFromFB;
     ArrayList<String> cQuantityFromFB;
     Button apply;
+    Invoice inv;
+    ArrayList<Invoice> listInv;
     String userName;
     float total=0;
 
@@ -52,6 +57,8 @@ public class NewClientActivity extends Activity {
         setContentView(R.layout.activity_new_client);
         Bundle extras = getIntent().getExtras();
         totalETxt=findViewById(R.id.newClientTotallyTxt);
+        cardETxt=findViewById(R.id.newClientCardNumberETxt);
+        mailETxt=findViewById(R.id.newClientEmailETxt);
         apply=findViewById(R.id.newClientApplyBtn);
         userName = extras.getString("username");
         howMany = (TextView) findViewById(R.id.newClientHowManyETxt);
@@ -62,9 +69,10 @@ public class NewClientActivity extends Activity {
         cProductFromFB = new ArrayList<String>();
         cPriceFromFB = new ArrayList<String>();
         cQuantityFromFB = new ArrayList<String>();
+        listInv = new ArrayList<Invoice>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = firebaseDatabase.getReference();
-
+        final JSONArray jArray = null;
         adapter = new AllPostClass(productFromFB,priceFromFB,this);
         adapter2 = new CreateClass(cProductFromFB,cQuantityFromFB,cPriceFromFB,this);
         cListView.setAdapter(adapter2);
@@ -73,10 +81,27 @@ public class NewClientActivity extends Activity {
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date time = Calendar.getInstance().getTime();
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(time);
-                myRef.child("invoices").child(userName).child(formattedDate).child("for").setValue(userName);
+                String time=DateFormat.getDateTimeInstance().format(new Date());
+                for(int i=0;i<listInv.size();i++){
+                    myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child(listInv.get(i).name).setValue(listInv.get(i));
+                    Log.d("APTAL", "onClick: "+listInv.get(i).name);
+                }
+                myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("total").setValue(total);
+                myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("email").setValue(mailETxt.getText().toString());
+                myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("employee").setValue(userName);
+                System.out.println(inv.toString());//TODO toplam ekle
+            }
+        });
+
+
+        cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                cProductFromFB.remove(position);
+                cPriceFromFB.remove(position);
+                cQuantityFromFB.remove(position);
+                adapter2.notifyDataSetChanged();
+                listInv.remove(position);
             }
         });
 
@@ -96,13 +121,13 @@ public class NewClientActivity extends Activity {
                     JSONObject jo=new JSONObject();
                     try {
 
-                        Date time = Calendar.getInstance().getTime();
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                        String formattedDate = df.format(time);
-                        Invoice inv=new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
-                        myRef.child("invoices").child(userName).child(formattedDate).child(cProductFromFB.get(position)).setValue(inv);
+                       // String time=DateFormat.getDateTimeInstance().format(new Date());
+                        inv = new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
+
+                        listInv.add(inv);
+                        //myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
                         //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
-                        System.out.println(inv);//TODO toplam ekle
+                        System.out.println("BAKSANA"+inv);//TODO toplam ekle
                     }
                     catch (Exception e){
 
