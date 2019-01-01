@@ -37,7 +37,10 @@ import java.util.Map;
 
 public class CreateShoppingListActivity extends Activity {
 
-    TextView howMany;
+    String it;
+    String it2;
+    String it3;
+    TextView howMany,totalETxt;
     ListView listView;
     ListView cListView;
     AllPostClass adapter;
@@ -51,6 +54,9 @@ public class CreateShoppingListActivity extends Activity {
     ArrayList<String> cQuantityFromFB;
     String userName;
     Button apply, back;
+    ArrayList<Invoice> listInv;
+    Invoice inv;
+    float total=0;
 
 
     @Override
@@ -64,11 +70,15 @@ public class CreateShoppingListActivity extends Activity {
         cListView = findViewById(R.id.createShoppingListChoosenListView);
         apply = findViewById(R.id.createShoppingListApplyBtn);
         back = findViewById(R.id.createShoppingListBackBtn);
+        totalETxt = findViewById(R.id.createShoppingListTotallyTxt);
+
         productFromFB = new ArrayList<String>();
         priceFromFB = new ArrayList<String>();
         cProductFromFB = new ArrayList<String>();
         cPriceFromFB = new ArrayList<String>();
         cQuantityFromFB = new ArrayList<String>();
+
+        listInv = new ArrayList<Invoice>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = firebaseDatabase.getReference();
 
@@ -82,9 +92,12 @@ public class CreateShoppingListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cProductFromFB.remove(position);
+                total-= Float.parseFloat(cPriceFromFB.get(position).toString());
+                totalETxt.setText(String.valueOf(total));
                 cPriceFromFB.remove(position);
                 cQuantityFromFB.remove(position);
                 adapter2.notifyDataSetChanged();
+                listInv.remove(position);
             }
         });
 
@@ -95,24 +108,29 @@ public class CreateShoppingListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),position+"-"+productFromFB.get(position),Toast.LENGTH_SHORT).show();
                 if(!howMany.getText().toString().isEmpty()) {
-                    cProductFromFB.add(productFromFB.get(position));
+                    it=productFromFB.get(position);
+                    cProductFromFB.add(it);
                     Float calculate = Float.parseFloat(String.valueOf(priceFromFB.get(position))) * Float.parseFloat(howMany.getText().toString());
+                    total+=calculate;
+                    totalETxt.setText(String.valueOf(total));
                     cPriceFromFB.add(String.valueOf(calculate));
                     cQuantityFromFB.add(howMany.getText().toString());
                     adapter2.notifyDataSetChanged();
 
-
-                    /*Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
-                    JSONObject jo=new JSONObject();
                     try {
 
-                        Invoice inv=new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
-                        myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
-                        System.out.println(inv);//TODO toplam ekle
+                        // String time=DateFormat.getDateTimeInstance().format(new Date());
+                        inv = new Invoice(productFromFB.get(position),calculate.toString(),howMany.getText().toString());
+
+                        listInv.add(inv);
+                        Log.d("EKLEME", "onItemClick: "+inv.name);
+                        //myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
+                        //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
+                        System.out.println("BAKSANA"+inv);//TODO toplam ekle
                     }
                     catch (Exception e){
 
-                    }*/
+                    }
 
                 }
                 else{
