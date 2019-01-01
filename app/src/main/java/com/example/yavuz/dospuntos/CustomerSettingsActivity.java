@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,6 +89,8 @@ public class CustomerSettingsActivity extends Activity {
                 mDatabaseRef.child("customers").child(uname).child("lName").setValue(sname.getText().toString());
                 mDatabaseRef.child("customers").child(uname).child("email").setValue(email.getText().toString());
                 mDatabaseRef.child("customers").child(uname).child("address").setValue(adress.getText().toString());
+                Toast.makeText(getApplicationContext(),"Successful.",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +59,7 @@ public class EmployeeSettingsActivity extends Activity {
                 mDatabaseRef.child("employee").child(uname).child("pw").setValue(pass.getText().toString());
                 mDatabaseRef.child("employee").child(uname).child("fn").setValue(fn.getText().toString());
                 mDatabaseRef.child("employee").child(uname).child("ln").setValue(ln.getText().toString());
+                Toast.makeText(getApplicationContext(),"Successful.",Toast.LENGTH_SHORT).show();
 
                 finish();
 
