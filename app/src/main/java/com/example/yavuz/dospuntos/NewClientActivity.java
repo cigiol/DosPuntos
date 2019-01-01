@@ -1,11 +1,13 @@
 package com.example.yavuz.dospuntos;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,14 +21,16 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NewClientActivity extends Activity {
 
-    TextView howMany;
+    TextView howMany,totalETxt;
     ListView listView;
     ListView cListView;
     AllPostClass adapter;
@@ -38,13 +42,17 @@ public class NewClientActivity extends Activity {
     ArrayList<String> cProductFromFB;
     ArrayList<String> cPriceFromFB;
     ArrayList<String> cQuantityFromFB;
+    Button apply;
     String userName;
+    float total=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_client);
         Bundle extras = getIntent().getExtras();
+        totalETxt=findViewById(R.id.newClientTotallyTxt);
+        apply=findViewById(R.id.newClientApplyBtn);
         userName = extras.getString("username");
         howMany = (TextView) findViewById(R.id.newClientHowManyETxt);
         listView = findViewById(R.id.newClientProductListView);
@@ -62,6 +70,15 @@ public class NewClientActivity extends Activity {
         cListView.setAdapter(adapter2);
         listView.setAdapter(adapter);
 
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date time = Calendar.getInstance().getTime();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(time);
+                myRef.child("invoices").child(userName).child(formattedDate).child("for").setValue(userName);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,6 +87,8 @@ public class NewClientActivity extends Activity {
                 if(!howMany.getText().toString().isEmpty()) {
                     cProductFromFB.add(productFromFB.get(position));
                     Float calculate = Float.parseFloat(String.valueOf(priceFromFB.get(position))) * Float.parseFloat(howMany.getText().toString());
+                    total+=calculate;
+                    totalETxt.setText(String.valueOf(total));
                     cPriceFromFB.add(String.valueOf(calculate));
                     cQuantityFromFB.add(howMany.getText().toString());
                     adapter2.notifyDataSetChanged();
@@ -77,9 +96,12 @@ public class NewClientActivity extends Activity {
                     JSONObject jo=new JSONObject();
                     try {
 
-                        String time=DateFormat.getDateTimeInstance().format(new Date());
+                        Date time = Calendar.getInstance().getTime();
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                        String formattedDate = df.format(time);
                         Invoice inv=new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
-                        myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
+                        myRef.child("invoices").child(userName).child(formattedDate).child(cProductFromFB.get(position)).setValue(inv);
+                        //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
                         System.out.println(inv);//TODO toplam ekle
                     }
                     catch (Exception e){
@@ -96,7 +118,10 @@ public class NewClientActivity extends Activity {
         getDataFromFB();
         //getDataFromFBC();
     }
-    public void getDataFromFB(){
+
+
+
+        public void getDataFromFB(){
         DatabaseReference newRef= firebaseDatabase.getReference("products");
         newRef.addValueEventListener(new ValueEventListener() {
             @Override
