@@ -33,6 +33,9 @@ import java.util.Map;
 
 public class NewClientActivity extends Activity {
 
+    String it;
+    String it2;
+    String it3;
     TextView howMany,totalETxt,mailETxt,cardETxt;
     ListView listView;
     ListView cListView;
@@ -98,6 +101,8 @@ public class NewClientActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 cProductFromFB.remove(position);
+                total-= Float.parseFloat(cPriceFromFB.get(position).toString());
+                totalETxt.setText(String.valueOf(total));
                 cPriceFromFB.remove(position);
                 cQuantityFromFB.remove(position);
                 adapter2.notifyDataSetChanged();
@@ -110,21 +115,21 @@ public class NewClientActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(),productFromFB.get(position),Toast.LENGTH_SHORT).show();
                 if(!howMany.getText().toString().isEmpty()) {
-                    cProductFromFB.add(productFromFB.get(position));
+                    it=productFromFB.get(position);
+                    cProductFromFB.add(it);
                     Float calculate = Float.parseFloat(String.valueOf(priceFromFB.get(position))) * Float.parseFloat(howMany.getText().toString());
                     total+=calculate;
                     totalETxt.setText(String.valueOf(total));
                     cPriceFromFB.add(String.valueOf(calculate));
                     cQuantityFromFB.add(howMany.getText().toString());
                     adapter2.notifyDataSetChanged();
-                    Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
-                    JSONObject jo=new JSONObject();
                     try {
 
                        // String time=DateFormat.getDateTimeInstance().format(new Date());
-                        inv = new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
+                        inv = new Invoice(productFromFB.get(position),calculate.toString(),howMany.getText().toString());
 
                         listInv.add(inv);
+                        Log.d("EKLEME", "onItemClick: "+inv.name);
                         //myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
                         //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
                         System.out.println("BAKSANA"+inv);//TODO toplam ekle
