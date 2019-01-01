@@ -59,13 +59,14 @@ public class EmployeeSettingsActivity extends Activity {
                 mDatabaseRef.child("employee").child(uname).child("fn").setValue(fn.getText().toString());
                 mDatabaseRef.child("employee").child(uname).child("ln").setValue(ln.getText().toString());
 
+                finish();
+
                 }
             });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent employeeMainIntent = new Intent(EmployeeSettingsActivity.this,EmployeeActivity.class);
-                startActivity(employeeMainIntent);
+                finish();
             }
         });
     }

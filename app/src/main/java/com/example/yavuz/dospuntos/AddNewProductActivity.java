@@ -11,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AddNewProductActivity extends Activity {
-    private Button add;
+    private Button add, back;
     EditText name,price,quantity;
 
     final   FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -33,12 +33,19 @@ public class AddNewProductActivity extends Activity {
         name=findViewById(R.id.addNewProductNameETxt);
         price=findViewById(R.id.addNewProductPriceETxt);
         quantity=findViewById(R.id.addNewQuanlityNameETxt2);
+        back=findViewById(R.id.addNewProductBackBtn);
         add=findViewById(R.id.addNewProductApplyBtn);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 writeNewUser(name.getText().toString(),price.getText().toString(),quantity.getText().toString());
 
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

@@ -1,12 +1,18 @@
 package com.example.yavuz.dospuntos;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +25,11 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateShoppingListActivity extends Activity {
@@ -39,6 +47,8 @@ public class CreateShoppingListActivity extends Activity {
     ArrayList<String> cPriceFromFB;
     ArrayList<String> cQuantityFromFB;
     String userName;
+    Button apply, back;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,8 @@ public class CreateShoppingListActivity extends Activity {
         howMany = (TextView) findViewById(R.id.createShoppingListHowManyETxt);
         listView = findViewById(R.id.createShoppingListProductListView);
         cListView = findViewById(R.id.createShoppingListChoosenListView);
+        apply = findViewById(R.id.createShoppingListApplyBtn);
+        back = findViewById(R.id.createShoppingListBackBtn);
         productFromFB = new ArrayList<String>();
         priceFromFB = new ArrayList<String>();
         cProductFromFB = new ArrayList<String>();
@@ -94,6 +106,110 @@ public class CreateShoppingListActivity extends Activity {
 
         getDataFromFB();
         //getDataFromFBC();
+
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateShoppingListActivity.this);
+                final View mView = getLayoutInflater().inflate(R.layout.invoiceaccept,null);
+                final Spinner cardSpin = (Spinner) mView.findViewById(R.id.invoiceAcceptCardSpinner);
+                Button applyBtn = (Button) mView.findViewById(R.id.invoiceAcceptApplyBtn);
+                Button backBtn = (Button) mView.findViewById(R.id.invoiceAcceptBackBtn);
+                ListView invoicelV = (ListView) mView.findViewById(R.id.invoiceAcceptListV);
+
+                final DatabaseReference mDatabase;
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        //Array for cards info
+                        List<String> cards = new ArrayList<String>();
+
+                        for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
+
+                            if(customers.getKey().equals(userName)){
+                                Iterable<DataSnapshot> cardValue = customers.child("cards").getChildren();
+
+                                for (DataSnapshot card : cardValue){
+                                    float po = Float.parseFloat(card.getValue().toString());
+                                    cards.add("Number:"+card.getKey()+"::Points:"+new DecimalFormat("##.##").format(po));
+                                }
+                                break;
+                            }
+                        }
+
+                        ArrayAdapter<String> adapterIn = new ArrayAdapter<String>(CreateShoppingListActivity.this, android.R.layout.simple_list_item_1,cards);
+                        cardSpin.setAdapter(adapterIn);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+
+                applyBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //
+                        // Bu kısma alınan ürünlerin toplam fiyati hesaplanacak ve puandan düşecek
+                        // ayrıca alınan ürünlerden gelen puanlar karta eklenecek
+                        //
+                        // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
+
+                        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean okay = false;
+
+                               /* for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
+                                    if(customers.getKey().equals(userName)){
+                                        String [] cardsValues = cardSpin.getSelectedItem().toString().split(":");//Index 1 Number , index 4 points
+                                        float oldPoint = Float.parseFloat(cardsValues[4]);
+                                        float newPoint = oldPoint - point;
+                                        if(newPoint<0){
+                                            Toast.makeText(getApplicationContext(),"You don't have enough points.",Toast.LENGTH_SHORT).show();
+                                            break;
+                                        }
+                                        else{
+                                            mDatabase.child(userName).child("cards").child(String.valueOf(cardsValues[1])).setValue(newPoint);
+                                            okay = true;
+                                        }
+                                    }
+                                    if (okay == true)
+                                        break;
+                                }*/
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+                });
+                backBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+
+
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     public void getDataFromFB(){
         DatabaseReference newRef= firebaseDatabase.getReference("products");

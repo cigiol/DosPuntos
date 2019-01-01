@@ -22,7 +22,7 @@ import java.util.List;
 public class CustomerSettingsActivity extends Activity {
 
     private EditText name,sname,adress,email,pass;
-    private Button apply;
+    private Button apply, back;
     private Spinner list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class CustomerSettingsActivity extends Activity {
         final DatabaseReference mDatabaseRef = database.getReference();
 
         apply=findViewById(R.id.customerSettingsApplyBtn);
-
+        back = findViewById(R.id.customerSettingsBackBtn);
         list=findViewById(R.id.CostumerCards);
 
         name=findViewById(R.id.customerSettingsNameETxt);
@@ -88,6 +88,12 @@ public class CustomerSettingsActivity extends Activity {
                 mDatabaseRef.child("customers").child(uname).child("lName").setValue(sname.getText().toString());
                 mDatabaseRef.child("customers").child(uname).child("email").setValue(email.getText().toString());
                 mDatabaseRef.child("customers").child(uname).child("address").setValue(adress.getText().toString());
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

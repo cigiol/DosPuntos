@@ -28,6 +28,7 @@ public class ProductPriceActivity extends Activity {
     DatabaseReference myRef;
     ArrayList<String> productFromFB;
     ArrayList<String> priceFromFB;
+    Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class ProductPriceActivity extends Activity {
         setContentView(R.layout.activity_product_price);
 
         listView = findViewById(R.id.listView);
+        back = findViewById(R.id.productPriceBackBtn);
         productFromFB = new ArrayList<String>();
         priceFromFB = new ArrayList<String>();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -44,6 +46,13 @@ public class ProductPriceActivity extends Activity {
 
         listView.setAdapter(adapter);
         getDataFromFB();
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     public void getDataFromFB(){
         DatabaseReference newRef= firebaseDatabase.getReference("products");
