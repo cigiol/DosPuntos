@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class EmployeeActivity extends Activity {
-    private Button setting,additem;
+    private Button setting,additem,newClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +17,7 @@ public class EmployeeActivity extends Activity {
 
         setting=findViewById(R.id.employeeSettingsBtn);
         additem=findViewById(R.id.employeeAddNewProductBtn);
+        newClient = findViewById(R.id.employeeNewClientBtn);
 
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,5 +36,13 @@ public class EmployeeActivity extends Activity {
             }
         });
 
+        newClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addNewClient = new Intent(EmployeeActivity.this,NewClientActivity.class);
+                addNewClient.putExtra("username",username);
+                startActivity(addNewClient);
+            }
+        });
     }
 }
