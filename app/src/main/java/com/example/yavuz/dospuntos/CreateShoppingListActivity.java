@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,28 +77,42 @@ public class CreateShoppingListActivity extends Activity {
         cListView.setAdapter(adapter2);
         listView.setAdapter(adapter);
 
+
+        cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                cProductFromFB.remove(position);
+                cPriceFromFB.remove(position);
+                cQuantityFromFB.remove(position);
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),productFromFB.get(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),position+"-"+productFromFB.get(position),Toast.LENGTH_SHORT).show();
                 if(!howMany.getText().toString().isEmpty()) {
                     cProductFromFB.add(productFromFB.get(position));
                     Float calculate = Float.parseFloat(String.valueOf(priceFromFB.get(position))) * Float.parseFloat(howMany.getText().toString());
                     cPriceFromFB.add(String.valueOf(calculate));
                     cQuantityFromFB.add(howMany.getText().toString());
                     adapter2.notifyDataSetChanged();
-                    Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
+
+
+                    /*Map<String, JSONObject> userMap= new HashMap<String, JSONObject>();
                     JSONObject jo=new JSONObject();
                     try {
 
-                        String time=DateFormat.getDateTimeInstance().format(new Date());
                         Invoice inv=new Invoice(cProductFromFB.get(position),cPriceFromFB.get(position),cQuantityFromFB.get(position));
                         myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
                         System.out.println(inv);//TODO toplam ekle
                     }
                     catch (Exception e){
 
-                    }
+                    }*/
 
                 }
                 else{
@@ -115,7 +132,6 @@ public class CreateShoppingListActivity extends Activity {
                 final Spinner cardSpin = (Spinner) mView.findViewById(R.id.invoiceAcceptCardSpinner);
                 Button applyBtn = (Button) mView.findViewById(R.id.invoiceAcceptApplyBtn);
                 Button backBtn = (Button) mView.findViewById(R.id.invoiceAcceptBackBtn);
-                ListView invoicelV = (ListView) mView.findViewById(R.id.invoiceAcceptListV);
 
                 final DatabaseReference mDatabase;
                 mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -161,6 +177,11 @@ public class CreateShoppingListActivity extends Activity {
                         //
                         // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
 
+
+                        String time=DateFormat.getDateTimeInstance().format(new Date());
+                        //Invoice inv=new Invoice(cProductFromFB,cPriceFromFB,cQuantityFromFB);
+                        //myRef.child("invoices").child(userName).child(time).child(cProductFromFB).setValue(inv);
+
                         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -183,7 +204,6 @@ public class CreateShoppingListActivity extends Activity {
                                     if (okay == true)
                                         break;
                                 }*/
-
                             }
 
                             @Override
@@ -194,6 +214,7 @@ public class CreateShoppingListActivity extends Activity {
 
                     }
                 });
+
                 backBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

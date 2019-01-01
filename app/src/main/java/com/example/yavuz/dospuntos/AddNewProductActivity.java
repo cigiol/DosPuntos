@@ -28,8 +28,6 @@ public class AddNewProductActivity extends Activity {
         setContentView(R.layout.activity_add_new_product);
 
 
-
-
         name=findViewById(R.id.addNewProductNameETxt);
         price=findViewById(R.id.addNewProductPriceETxt);
         quantity=findViewById(R.id.addNewQuanlityNameETxt2);
