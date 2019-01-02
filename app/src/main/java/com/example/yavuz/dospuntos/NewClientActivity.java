@@ -208,11 +208,7 @@ public class NewClientActivity extends Activity {
                                             }
                                         });
                                     }
-                                    else
-                                    {
-                                        Toast.makeText(getApplicationContext(),"Mail or Card number is wrong",Toast.LENGTH_SHORT).show();
 
-                                    }
 
                                 }
                                 break;
