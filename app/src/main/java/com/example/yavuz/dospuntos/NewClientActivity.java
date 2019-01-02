@@ -259,7 +259,7 @@ public class NewClientActivity extends Activity {
                         Log.d("EKLEME", "onItemClick: "+inv.name);
                         //myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
                         //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
-                        System.out.println("BAKSANA"+inv);//TODO toplam ekle
+                        System.out.println("BAKSANA"+inv);
                     }
                     catch (Exception e){
 
