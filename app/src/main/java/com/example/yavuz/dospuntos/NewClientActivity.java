@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
@@ -54,7 +55,7 @@ public class NewClientActivity extends Activity {
     ArrayList<String> cProductFromFB;
     ArrayList<String> cPriceFromFB;
     ArrayList<String> cQuantityFromFB;
-    Button apply;
+    Button apply,back;
     Invoice inv;
     ArrayList<Invoice> listInv;
     String userName;
@@ -69,6 +70,7 @@ public class NewClientActivity extends Activity {
         cardETxt=findViewById(R.id.newClientCardNumberETxt);
         mailETxt=findViewById(R.id.newClientEmailETxt);
         apply=findViewById(R.id.newClientApplyBtn);
+        back=findViewById(R.id.newClientBackBtn);
         userName = extras.getString("username");
         howMany = (TextView) findViewById(R.id.newClientHowManyETxt);
         listView = findViewById(R.id.newClientProductListView);
@@ -90,23 +92,32 @@ public class NewClientActivity extends Activity {
         //TODO Kart ve email kontrolleri yapilsin
         //TODO Listelerde ayni urunler ust uste toplansin
         apply.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                final DatabaseReference mDatabase,nDatabase;
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                nDatabase=firebaseDatabase.getInstance().getReference();
 
                 //======
+
+
+
+
 
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(NewClientActivity.this);
                 final View mView = getLayoutInflater().inflate(R.layout.invoiceaccept,null);
                 final Spinner cardSpin = (Spinner) mView.findViewById(R.id.invoiceAcceptCardSpinner);
-                Button applyBtn = (Button) mView.findViewById(R.id.invoiceAcceptApplyBtn);
-                Button backBtn = (Button) mView.findViewById(R.id.invoiceAcceptBackBtn);
+                final Button applyBtn = (Button) mView.findViewById(R.id.invoiceAcceptApplyBtn);
+                final Button backBtn = (Button) mView.findViewById(R.id.invoiceAcceptBackBtn);
                 final CheckBox sale = (CheckBox) mView.findViewById(R.id.invoiceSaleCheck);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
 
-                final DatabaseReference mDatabase;
-                mDatabase = FirebaseDatabase.getInstance().getReference();
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
 
                         //Array for cards info
                         List<String> cards = new ArrayList<String>();
@@ -120,10 +131,97 @@ public class NewClientActivity extends Activity {
                                     if(card.getKey().equals(cardETxt.getText().toString())){
                                         float po = Float.parseFloat(card.getValue().toString());
                                         cards.add("Number:"+card.getKey()+"::Points:"+new DecimalFormat("##.##").format(po));
-                                        break;
+                                        dialog.show();
+                                        applyBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                //
+                                                //
+                                                // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
+
+                                                String time=DateFormat.getDateTimeInstance().format(new Date());
+                                                //Invoice inv=new Invoice(cProductFromFB,cPriceFromFB,cQuantityFromFB);
+                                                //myRef.child("invoices").child(userName).child(time).child(cProductFromFB).setValue(inv);
+
+                                                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        boolean okay = false;
+
+                                                        //TODO Firebase fatura ekle
+                                                        for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
+                                                            if(customers.child("email").getValue().equals(mailETxt.getText().toString())){
+
+                                                                String [] cardsValues = cardSpin.getSelectedItem().toString().split(":");//Index 1 Number , index 4 points
+                                                                float oldPoint = Float.parseFloat(cardsValues[4]);
+                                                                oldPoint = oldPoint * (float) 0.05;
+                                                                float newPoint = oldPoint - total;
+                                                                if(sale.isChecked()){
+                                                                    if(newPoint<0){
+                                                                        Toast.makeText(getApplicationContext(),"You don't have enough points. You have to pay more "+ (total - oldPoint) ,Toast.LENGTH_SHORT).show();
+                                                                        mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(0);
+                                                                        Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                    else{
+                                                                        newPoint = newPoint / (float) 0.05;
+                                                                        float newP = newPoint + total;
+                                                                        mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
+                                                                        Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                                else{
+                                                                    float newP = Float.parseFloat(cardsValues[4]) + total;
+                                                                    mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
+                                                                    Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
+                                                                }
+                                                                okay = true;
+                                                            }
+                                                            if (okay == true)
+                                                                break;
+                                                        }
+                                                        if(okay){
+                                                            String time=DateFormat.getDateTimeInstance().format(new Date());
+                                                            for(int i=0;i<listInv.size();i++){
+                                                                myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child(listInv.get(i).name).setValue(listInv.get(i));
+                                                                Log.d("APTAL", "onClick: "+listInv.get(i).name);
+                                                            }
+                                                            myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("total").setValue(total);
+                                                            myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("email").setValue(mailETxt.getText().toString());
+                                                            myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("employee").setValue(userName);
+                                                        }
+
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                                Toast.makeText(getApplicationContext(),"Succesfully.",Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            }
+                                        });
+
+                                        backBtn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.cancel();
+                                            }
+                                        });
                                     }
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(),"Mail or Card number is wrong",Toast.LENGTH_SHORT).show();
+
+                                    }
+
                                 }
                                 break;
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),"Mail or Card number is wrong",Toast.LENGTH_SHORT).show();
+
+
                             }
                         }
                         ArrayAdapter<String> adapterIn = new ArrayAdapter<String>(NewClientActivity.this, android.R.layout.simple_list_item_1,cards);
@@ -136,84 +234,8 @@ public class NewClientActivity extends Activity {
                     }
                 });
 
-                mBuilder.setView(mView);
-                final AlertDialog dialog = mBuilder.create();
-                dialog.show();
-                applyBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //
-                        //
-                        // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
 
-                        String time=DateFormat.getDateTimeInstance().format(new Date());
-                        //Invoice inv=new Invoice(cProductFromFB,cPriceFromFB,cQuantityFromFB);
-                        //myRef.child("invoices").child(userName).child(time).child(cProductFromFB).setValue(inv);
 
-                        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                boolean okay = false;
-
-                                //TODO Firebase fatura ekle
-                                for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
-                                    if(customers.child("email").getValue().equals(mailETxt.getText().toString())){
-
-                                        String [] cardsValues = cardSpin.getSelectedItem().toString().split(":");//Index 1 Number , index 4 points
-                                        float oldPoint = Float.parseFloat(cardsValues[4]);
-                                        oldPoint = oldPoint * (float) 0.05;
-                                        float newPoint = oldPoint - total;
-                                        if(sale.isChecked()){
-                                            if(newPoint<0){
-                                                Toast.makeText(getApplicationContext(),"You don't have enough points. You have to pay more "+ (total - oldPoint) ,Toast.LENGTH_SHORT).show();
-                                                mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(0);
-                                                Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
-                                            }
-                                            else{
-                                                newPoint = newPoint / (float) 0.05;
-                                                float newP = newPoint + total;
-                                                mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
-                                                Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                        else{
-                                            float newP = Float.parseFloat(cardsValues[4]) + total;
-                                            mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
-                                            Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
-                                        }
-                                        okay = true;
-                                    }
-                                    if (okay == true)
-                                        break;
-                                }
-                                if(okay){
-                                    String time=DateFormat.getDateTimeInstance().format(new Date());
-                                    for(int i=0;i<listInv.size();i++){
-                                        myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child(listInv.get(i).name).setValue(listInv.get(i));
-                                        Log.d("APTAL", "onClick: "+listInv.get(i).name);
-                                    }
-                                    myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("total").setValue(total);
-                                    myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("email").setValue(mailETxt.getText().toString());
-                                    myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("employee").setValue(userName);
-                                }
-
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                        Toast.makeText(getApplicationContext(),"Succesfully.",Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-
-                backBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.cancel();
-                    }
-                });
 
                 //======
             }
@@ -239,6 +261,7 @@ public class NewClientActivity extends Activity {
                 Toast.makeText(getApplicationContext(),productFromFB.get(position),Toast.LENGTH_SHORT).show();
                 if(!howMany.getText().toString().isEmpty()) {
                     it=productFromFB.get(position);
+
                     cProductFromFB.add(it);
                     Float calculate = Float.parseFloat(String.valueOf(priceFromFB.get(position))) * Float.parseFloat(howMany.getText().toString());
                     total+=calculate;
@@ -295,5 +318,12 @@ public class NewClientActivity extends Activity {
 
             }
         });
+    back.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    });
     }
+
 }

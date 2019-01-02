@@ -8,7 +8,7 @@
     tools:context=".NewClientActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="190dp"
         android:orientation="vertical">
         <TextView
@@ -24,7 +24,7 @@
             android:inputType="number" />
         <ListView
             android:id="@+id/newClientProductListView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"></ListView>
     </LinearLayout>
     <TextView
@@ -54,7 +54,7 @@
         android:id="@+id/newClientEmailETxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"/>
+        android:hint="Username" />
     <EditText
         android:id="@+id/newClientCardNumberETxt"
         android:layout_width="match_parent"

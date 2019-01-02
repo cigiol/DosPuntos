@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,7 +24,7 @@ import java.util.List;
 public class CustomerSettingsActivity extends Activity {
 
     private EditText name,sname,adress,email,pass;
-    private Button apply, back;
+    private Button apply, back,delete;
     private Spinner list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class CustomerSettingsActivity extends Activity {
         apply=findViewById(R.id.customerSettingsApplyBtn);
         back = findViewById(R.id.customerSettingsBackBtn);
         list=findViewById(R.id.CostumerCards);
-
+        delete=findViewById(R.id.customerSettingsCardDeleteBtn);
         name=findViewById(R.id.customerSettingsNameETxt);
         sname=findViewById(R.id.customerSettingsSurnameETxt);
         adress=findViewById(R.id.customerSettingsAddressETxt);
@@ -61,7 +62,8 @@ public class CustomerSettingsActivity extends Activity {
                         Iterable<DataSnapshot> cardValue = customers.child("cards").getChildren();
 
                         for (DataSnapshot card : cardValue){
-                            cards.add("Number:"+card.getKey()+"::Points:"+card.getValue());
+                            cards.add(card.getKey()+"::Card Points: "+card.getValue());
+
                         }
                         break;
                     }
@@ -76,7 +78,24 @@ public class CustomerSettingsActivity extends Activity {
 
             }
         };
-        mDatabaseRef.addListenerForSingleValueEvent(postlisten);
+        mDatabaseRef.addValueEventListener(postlisten);
+
+
+        // DElete
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String deleteItem= list.getSelectedItem().toString();
+               String[] s=deleteItem.split("::Card Points: ");
+               String newString=s[0];
+                Log.d("EKLEME", "onItemClick: "+newString);
+                DatabaseReference deleteitem= mDatabaseRef.child("customers").child(uname).child("cards").child(newString);
+               deleteitem.removeValue();
+                Toast.makeText(getApplicationContext(),"Successful.",Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
 
 
 

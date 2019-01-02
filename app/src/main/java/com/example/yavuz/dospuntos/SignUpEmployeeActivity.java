@@ -40,41 +40,73 @@ public class SignUpEmployeeActivity extends Activity {
         fn = findViewById(R.id.employeeSignUpFNameETxt);
         ln = findViewById(R.id.employeeSignUpLNameETxt);
 
+
+
+
     }
 
     public void applyClick(View view){
+        boolean[] check={true,true,true,true};
+        final String uName = un.getText().toString().trim();
+        final boolean[] usernameExist = {false,false,false};
+        final String pw1 = pw.getText().toString();
+        final String firstName = fn.getText().toString();
+        final String lastName = ln.getText().toString();
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = firebaseDatabase.getReference();
+        if(uName.isEmpty()) {
+            check[0]=false;
+            un.setError("Fill it");
+        }
+        if(pw1.isEmpty()) {
+            check[1]=false;
+            pw.setError("Fill it");
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("employee").child(un.getText().toString()).exists() || snapshot.child("customers").child(un.getText().toString()).exists() ) {
-                    Toast.makeText(getApplicationContext(),"USERNAME EXIST",Toast.LENGTH_SHORT).show();
+        }
+        if(firstName.isEmpty()) {
+            check[2]=false;
+            fn.setError("Fill it");
+
+        }
+        if(lastName.isEmpty()) {
+            check[3]=false;
+            ln.setError("Fill it");
+        }
+
+        if(check[0]&&check[1]&&check[2]&&check[3]&&check[4]&&check[5])
+        {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            myRef = firebaseDatabase.getReference();
+
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.child("employee").child(un.getText().toString()).exists() || snapshot.child("customers").child(un.getText().toString()).exists() ) {
+                        Toast.makeText(getApplicationContext(),"USERNAME EXIST",Toast.LENGTH_SHORT).show();
+
+                    }
+                    else {
+                        firebaseDatabase = FirebaseDatabase.getInstance();
+                        myRef = firebaseDatabase.getReference();
+
+                        employee employee = new employee(un.getText().toString(), pw.getText().toString(),fn.getText().toString(),ln.getText().toString());
+
+                        myRef.child("employee").child(un.getText().toString()).setValue(employee);
+                        Toast.makeText(getApplicationContext(),"SUCCESSFULLY",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-                else {
-                    firebaseDatabase = FirebaseDatabase.getInstance();
-                    myRef = firebaseDatabase.getReference();
+            });
 
-                    employee employee = new employee(un.getText().toString(), pw.getText().toString(),fn.getText().toString(),ln.getText().toString());
+        }
 
-                    myRef.child("employee").child(un.getText().toString()).setValue(employee);
-                    Toast.makeText(getApplicationContext(),"SUCCESSFULLY",Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void backClick(View view){
-        Intent employeeSignUpIntent = new Intent(SignUpEmployeeActivity.this,WelcomeActivity.class);
-        startActivity(employeeSignUpIntent);
+        finish();
     }
 }

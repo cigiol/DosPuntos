@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class CustomerActivity extends Activity {
 
-    Button addCard,pointToFriend,showList,createList,setting;
+    Button addCard,pointToFriend,showList,createList,setting,Logout;
 
     Spinner cardSpinner;
 
@@ -41,6 +41,7 @@ public class CustomerActivity extends Activity {
         showList = findViewById(R.id.customerShowListBtn);
         createList = findViewById(R.id.customerCreateListBtn);
         cardSpinner = findViewById(R.id.customerCardSpinner);
+        Logout=findViewById(R.id.customerLogoutBtn);
         showList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +136,13 @@ public class CustomerActivity extends Activity {
             }
         });
 
+
+        Logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         //Add Card
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override
