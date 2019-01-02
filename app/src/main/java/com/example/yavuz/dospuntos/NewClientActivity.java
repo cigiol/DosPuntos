@@ -94,7 +94,6 @@ public class NewClientActivity extends Activity {
             public void onClick(View v) {
 
                 //======
-
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(NewClientActivity.this);
                 final View mView = getLayoutInflater().inflate(R.layout.invoiceaccept,null);
                 final Spinner cardSpin = (Spinner) mView.findViewById(R.id.invoiceAcceptCardSpinner);
@@ -129,7 +128,6 @@ public class NewClientActivity extends Activity {
                         ArrayAdapter<String> adapterIn = new ArrayAdapter<String>(NewClientActivity.this, android.R.layout.simple_list_item_1,cards);
                         cardSpin.setAdapter(adapterIn);
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -142,10 +140,6 @@ public class NewClientActivity extends Activity {
                 applyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //
-                        //
-                        // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
-
                         String time=DateFormat.getDateTimeInstance().format(new Date());
                         //Invoice inv=new Invoice(cProductFromFB,cPriceFromFB,cQuantityFromFB);
                         //myRef.child("invoices").child(userName).child(time).child(cProductFromFB).setValue(inv);
@@ -195,6 +189,19 @@ public class NewClientActivity extends Activity {
                                     myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("total").setValue(total);
                                     myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("email").setValue(mailETxt.getText().toString());
                                     myRef.child("invoices").child(cardETxt.getText().toString()).child(time).child("employee").setValue(userName);
+
+                                    for(int i=0;i<listInv.size();i++){
+                                        for(DataSnapshot products : dataSnapshot.child("products").getChildren()){
+                                            if (products.child("name").getValue().equals(listInv.get(i).name)){
+                                                int newQuantity = Integer.parseInt(products.child("quantity").getValue().toString()) - Integer.parseInt(listInv.get(i).quantity);
+                                                mDatabase.child("products").child(products.getKey()).child("quantity").setValue(newQuantity);
+                                                break;
+                                            }
+                                        }
+
+                                    }
+
+                                    Toast.makeText(getApplicationContext(),"Succesfully.",Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -203,18 +210,15 @@ public class NewClientActivity extends Activity {
 
                             }
                         });
-                        Toast.makeText(getApplicationContext(),"Succesfully.",Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
-
                 backBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.cancel();
                     }
                 });
-
                 //======
             }
         });

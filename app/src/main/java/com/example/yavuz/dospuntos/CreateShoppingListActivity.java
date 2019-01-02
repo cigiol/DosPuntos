@@ -125,7 +125,7 @@ public class CreateShoppingListActivity extends Activity {
                         Log.d("EKLEME", "onItemClick: "+inv.name);
                         //myRef.child("invoices").child(userName).child(time).child(cProductFromFB.get(position)).setValue(inv);
                         //myRef.child("invoices").child(userName).child(formattedDate).child("total").setValue(total);
-                        System.out.println("BAKSANA"+inv);//TODO toplam ekle
+                        System.out.println("BAKSANA"+inv);
                     }
                     catch (Exception e){
 
@@ -149,6 +149,7 @@ public class CreateShoppingListActivity extends Activity {
                 final Spinner cardSpin = (Spinner) mView.findViewById(R.id.invoiceAcceptCardSpinner);
                 Button applyBtn = (Button) mView.findViewById(R.id.invoiceAcceptApplyBtn);
                 Button backBtn = (Button) mView.findViewById(R.id.invoiceAcceptBackBtn);
+                final CheckBox sale = (CheckBox) mView.findViewById(R.id.invoiceSaleCheck);
 
                 final DatabaseReference mDatabase;
                 mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -181,6 +182,7 @@ public class CreateShoppingListActivity extends Activity {
 
                     }
                 });
+
                 mBuilder.setView(mView);
                 final AlertDialog dialog = mBuilder.create();
                 dialog.show();
@@ -188,12 +190,6 @@ public class CreateShoppingListActivity extends Activity {
                 applyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //
-                        // Bu kısma alınan ürünlerin toplam fiyati hesaplanacak ve puandan düşecek
-                        // ayrıca alınan ürünlerden gelen puanlar karta eklenecek
-                        //
-                        // Ürünlerin sayısı tutulmalı ve databasedeki degerden düsmeli
-
 
                         String time=DateFormat.getDateTimeInstance().format(new Date());
                         //Invoice inv=new Invoice(cProductFromFB,cPriceFromFB,cQuantityFromFB);
@@ -204,23 +200,57 @@ public class CreateShoppingListActivity extends Activity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 boolean okay = false;
 
-                               /* for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
+                                String [] cardsValues = cardSpin.getSelectedItem().toString().split(":");//Index 1 Number , index 4 points
+                                for (DataSnapshot customers : dataSnapshot.child("customers").getChildren()) {
                                     if(customers.getKey().equals(userName)){
-                                        String [] cardsValues = cardSpin.getSelectedItem().toString().split(":");//Index 1 Number , index 4 points
                                         float oldPoint = Float.parseFloat(cardsValues[4]);
-                                        float newPoint = oldPoint - point;
-                                        if(newPoint<0){
-                                            Toast.makeText(getApplicationContext(),"You don't have enough points.",Toast.LENGTH_SHORT).show();
-                                            break;
+                                        oldPoint = oldPoint * (float) 0.05;
+                                        float newPoint = oldPoint - total;
+                                        if(sale.isChecked()){
+                                            if(newPoint<0){
+                                                Toast.makeText(getApplicationContext(),"You don't have enough points. You have to pay more "+ (total - oldPoint) ,Toast.LENGTH_SHORT).show();
+                                                mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(0);
+                                                Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                newPoint = newPoint / (float) 0.05;
+                                                float newP = newPoint + total;
+                                                mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
+                                                Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
+                                            }
                                         }
                                         else{
-                                            mDatabase.child(userName).child("cards").child(String.valueOf(cardsValues[1])).setValue(newPoint);
-                                            okay = true;
+                                            float newP = Float.parseFloat(cardsValues[4]) + total;
+                                            mDatabase.child("customers").child(customers.getKey()).child("cards").child(String.valueOf(cardsValues[1])).setValue(newP);
+                                            Toast.makeText(getApplicationContext(),"Points added.",Toast.LENGTH_SHORT).show();
                                         }
+                                        okay = true;
                                     }
                                     if (okay == true)
                                         break;
-                                }*/
+                                }
+                                if(okay){
+                                    String time=DateFormat.getDateTimeInstance().format(new Date());
+                                    for(int i=0;i<listInv.size();i++){
+                                        myRef.child("invoices").child(cardsValues[1]).child(time).child(listInv.get(i).name).setValue(listInv.get(i));
+                                        Log.d("APTAL", "onClick: "+listInv.get(i).name);
+                                    }
+                                    myRef.child("invoices").child(cardsValues[1]).child(time).child("total").setValue(total);
+
+                                    for(int i=0;i<listInv.size();i++){
+                                        for(DataSnapshot products : dataSnapshot.child("products").getChildren()){
+                                            if (products.child("name").getValue().equals(listInv.get(i).name)){
+                                                int newQuantity = Integer.parseInt(products.child("quantity").getValue().toString()) - Integer.parseInt(listInv.get(i).quantity);
+                                                mDatabase.child("products").child(products.getKey()).child("quantity").setValue(newQuantity);
+                                                break;
+                                                //TODO Productlar 0 in altina inerse uyarsin ama satis gerceklesmesin
+                                            }
+                                        }
+
+                                    }
+
+                                    Toast.makeText(getApplicationContext(),"Succesfully.",Toast.LENGTH_SHORT).show();
+                                }
                             }
 
                             @Override
@@ -228,7 +258,7 @@ public class CreateShoppingListActivity extends Activity {
 
                             }
                         });
-
+                        finish();
                     }
                 });
 
